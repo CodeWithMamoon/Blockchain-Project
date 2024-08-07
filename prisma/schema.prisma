@@ -1,0 +1,25 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Chain {
+  id      Int     @id @default(autoincrement())
+  name    String
+  chainId Int     @unique
+  tokens  Token[]
+}
+
+model Token {
+  id      Int     @id @default(autoincrement())
+  name    String
+  symbol  String
+  chainId Int
+  Chain   Chain   @relation(fields: [chainId], references: [chainId])
+
+  @@unique([symbol, chainId]) // Ensures unique combination of symbol and chainId
+}
