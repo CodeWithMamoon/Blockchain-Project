@@ -21,5 +21,5 @@ model Token {
   chainId Int
   Chain   Chain   @relation(fields: [chainId], references: [chainId])
 
-  @@unique([symbol, chainId]) // Ensures unique combination of symbol and chainId
+  @@unique([symbol, chainId])
 }
