@@ -1,25 +1,25 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model Route {
+  id             Int      @id @default(autoincrement())
+  fromChainId    Int
+  toChainId      Int
+  fromAmountUSD  String?
+  fromAmount     String
+  fromToken      String
+  fromAddress    String?
+  toAmountUSD    String?
+  toAmount       String
+  toAmountMin    String
+  toToken        String
+  toAddress      String?
+  gasCostUSD     String?
+  containsSwitchChain Boolean @default(false)
+  steps          Step[]
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-model Chain {
-  id      Int     @id @default(autoincrement())
-  name    String
-  chainId Int     @unique
-  tokens  Token[]
-}
-
-model Token {
-  id      Int     @id @default(autoincrement())
-  name    String
-  symbol  String
-  chainId Int
-  Chain   Chain   @relation(fields: [chainId], references: [chainId])
-
-  @@unique([symbol, chainId])
+model Step {
+  id                Int    @id @default(autoincrement())
+  action            String // Stored as a JSON string
+  executionDuration Int
+  routeId           Int
+  route             Route  @relation(fields: [routeId], references: [id])
 }
